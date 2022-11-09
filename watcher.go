@@ -497,7 +497,7 @@ func (w *Watcher) retrieveFileList() map[string]os.FileInfo {
 			if err != nil {
 				if os.IsNotExist(err) {
 					w.mu.Unlock()
-					if name == err.(*os.PathError).Path {
+					if e, ok := err.(*os.PathError); ok && name == e.Path {
 						w.Error <- ErrWatchedFileDeleted
 						w.RemoveRecursive(name)
 					}
